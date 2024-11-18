@@ -1,0 +1,156 @@
+﻿@model IEnumerable<restaurante.Models.Pedido>
+
+@{
+    ViewData["Title"] = "Pedidos y Detalles";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <h3>Crear Nuevo Pedido</h3>
+        <form asp-action="Create">
+            <input type="hidden" name="IdUsuario" value="@ViewData["CurrentUserId"]" />
+            <div class="form-group">
+                <label for="FechaHora">Fecha y Hora</label>
+                <input type="datetime-local" name="FechaHora" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label for="Estado">Estado</label>
+                <select name="Estado" class="form-control" required>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="en_preparacion">En preparación</option>
+                    <option value="listo">Listo</option>
+                    <option value="entregado">Entregado</option>
+                    <option value="cancelado">Cancelado</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="MetodoPago">Método de Pago</label>
+                <select name="MetodoPago" class="form-control" required>
+                    <option value="efectivo">Efectivo</option>
+                    <option value="tarjeta">Tarjeta</option>
+                    <option value="otro">Otro</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="Items">Seleccionar Ítems</label>
+                <select id="Items" name="IdItems" class="form-control" multiple asp-items="ViewBag.IdItem" required></select>
+            </div>
+            <div id="cantidadesContainer"></div>
+            <button type="submit" class="btn btn-primary">Crear Pedido</button>
+        </form>
+    </div>
+    <div class="col-md-6">
+        <h3>Agregar Detalle a Pedido</h3>
+        <form asp-action="CreateDetalle">
+            <div class="form-group">
+                <label for="IdPedido">Pedido</label>
+                <select name="IdPedido" class="form-control" asp-items="@(new SelectList(Model, "IdPedido", "IdPedido"))" required></select>
+            </div>
+            <div class="form-group">
+                <label for="IdItem">Item</label>
+                <select name="IdItem" class="form-control" asp-items="ViewBag.IdItem" required></select>
+            </div>
+            <div class="form-group">
+                <label for="Cantidad">Cantidad</label>
+                <input type="number" name="Cantidad" class="form-control" min="1" required />
+            </div>
+            <div class="form-group">
+                <label for="Notas">Notas</label>
+                <textarea name="Notas" class="form-control"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Agregar Detalle</button>
+        </form>
+    </div>
+</div>
+
+<hr />
+
+<h3>Lista de Pedidos</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Fecha</th>
+            <th>Usuario</th>
+            <th>Estado</th>
+            <th>Total</th>
+            <th>Método de Pago</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var pedido in Model)
+        {
+            <tr>
+                <td>@pedido.IdPedido</td>
+                <td>@pedido.FechaHora</td>
+                <td>@pedido.IdUsuarioNavigation.Email</td>
+                <td>@pedido.Estado</td>
+                <td>@pedido.Total.ToString("C")</td>
+                <td>@pedido.MetodoPago</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@pedido.IdPedido" class="btn btn-sm btn-info">Detalles</a>
+                    @if (User.IsInRole("administrador") || User.IsInRole("personal"))
+                    {
+                        <a asp-action="Delete" asp-route-id="@pedido.IdPedido" class="btn btn-sm btn-danger">Eliminar</a>
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td colspan="7">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Cantidad</th>
+                                <th>Precio Unitario</th>
+                                <th>Subtotal</th>
+                                <th>Notas</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var detalle in pedido.DetallesPedidos)
+                            {
+                                <tr>
+                                    <td>@detalle.IdItemNavigation.Nombre</td>
+                                    <td>@detalle.Cantidad</td>
+                                    <td>@detalle.PrecioUnitario.ToString("C")</td>
+                                    <td>@detalle.Subtotal.ToString("C")</td>
+                                    <td>@detalle.Notas</td>
+                                    <td>
+                                        <a asp-action="EditDetalle" asp-route-id="@detalle.IdDetalle" class="btn btn-sm btn-primary">Editar</a>
+                                        <form asp-action="DeleteDetalle" asp-route-id="@detalle.IdDetalle" method="post" style="display:inline;">
+                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Está seguro de que desea eliminar este detalle?');">Eliminar</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#Items').change(function () {
+                var selectedItems = $(this).val();
+                var container = $('#cantidadesContainer');
+                container.empty();
+
+                selectedItems.forEach(function (item) {
+                    container.append('<div class="form-group">' +
+                        '<label>Cantidad para item ' + item + '</label>' +
+                        '<input type="number" name="Cantidades" class="form-control" min="1" value="1" required />' +
+                        '</div>');
+                });
+            });
+        });
+    </script>
+}

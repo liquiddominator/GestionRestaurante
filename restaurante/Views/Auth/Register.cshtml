@@ -1,0 +1,47 @@
+﻿@model restaurante.Controllers.RegisterViewModel
+@{
+    ViewData["Title"] = "Registro";
+    ViewData["HideHeaderAndFooter"] = true;
+    Layout = "_Layout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/auth-styles.css" />
+}
+
+<div class="auth-container">
+    <div class="auth-logo">
+        <i class="fas fa-utensils"></i> Restaurante Gourmet
+    </div>
+    <h2>Registro de Usuario</h2>
+    <form asp-action="Register" method="post">
+        <div class="form-group">
+            <input asp-for="Nombre" class="form-control" placeholder="Nombre">
+            <span asp-validation-for="Nombre" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input asp-for="Apellido" class="form-control" placeholder="Apellido">
+            <span asp-validation-for="Apellido" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input asp-for="Email" class="form-control" placeholder="Email">
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input asp-for="Contrasena" type="password" class="form-control" placeholder="Contraseña">
+            <span asp-validation-for="Contrasena" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <select asp-for="IdRol" asp-items="Model.RolesDisponibles" class="form-control">
+                <option value="">Seleccione un rol</option>
+            </select>
+            <span asp-validation-for="IdRol" class="text-danger"></span>
+        </div>
+        <center>
+        <button type="submit" class="btn btn-success btn-block">Registrarse</button>
+        </center>
+    </form>
+    <div class="text-center mt-4">
+        <a asp-action="Login" class="text-success">¿Ya tienes una cuenta? Inicia sesión aquí</a>
+    </div>
+</div>

@@ -1,0 +1,157 @@
+/* Estilos generales */
+body:not(.auth-page) {
+    background-color: #fffcf6;
+    color: #7e6d5a;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding-top: 0;
+}
+
+.container:not(.auth-container) {
+    flex: 1 0 auto;
+    padding-bottom: 60px;
+}
+
+h1:not(.auth-h1) {
+    color: #7e6d5a;
+    font-weight: bold;
+    font-size: 3rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+/* Estilos para las tarjetas (cards) */
+.card:not(.auth-card) {
+    background-color: #e8e4d9;
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    transition: transform 0.3s;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+    .card:not(.auth-card):hover {
+        transform: translateY(-5px);
+    }
+
+.card-body:not(.auth-card-body) {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+}
+
+.card-title:not(.auth-card-title) {
+    color: #7e6d5a;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.card-text:not(.auth-card-text) {
+    color: #7e6d5a;
+    margin-bottom: 0.5rem;
+}
+
+.card-footer:not(.auth-card-footer) {
+    background-color: transparent;
+    border-top: none;
+    padding: 1rem 1.5rem;
+}
+
+.button-container:not(.auth-button-container) {
+    display: flex;
+    justify-content: space-between;
+    margin-top: auto;
+    padding-top: 10px;
+}
+
+    .button-container:not(.auth-button-container) .btn {
+        flex: 1;
+        margin: 0 5px;
+    }
+
+.btn-primary:not(.auth-btn-primary) {
+    background-color: #c2b280;
+    border-color: #c2b280;
+    color: #fff;
+}
+
+    .btn-primary:not(.auth-btn-primary):hover {
+        background-color: #7e6d5a;
+        border-color: #7e6d5a;
+    }
+
+.text-center.mt-4:not(.auth-text-center) {
+    margin-top: 2rem !important;
+    margin-bottom: 2rem !important;
+}
+
+.btn-lg:not(.auth-btn-lg) {
+    padding: 0.75rem 1.5rem;
+    font-size: 1.25rem;
+}
+
+/* Estilos para el footer */
+footer:not(.auth-footer) {
+    flex-shrink: 0;
+}
+
+/* Estilos para el navbar */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
+}
+
+.navbar-brand {
+    font-weight: bold;
+    color: #c2b280 !important;
+}
+
+/* Ajuste en el color base de los enlaces del menú */
+.nav-link {
+    color: #7e6d5a !important; /* Ajustar color a un tono visible */
+    font-weight: 500;
+}
+
+    /* Ajuste en el efecto hover */
+    .nav-link:hover {
+        color: #c2b280 !important;
+        background-color: #f1e7da; /* Añadir un ligero fondo */
+        border-radius: 5px; /* Bordes redondeados */
+    }
+
+/* Mejor visibilidad para el dropdown */
+/* Estilos para el dropdown */
+/* Estilos para el dropdown menu desplegable */
+.dropdown-menu {
+    background-color: #f5efe0; /* Fondo suave que combina con el tema */
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave para destacar el menú */
+}
+
+/* Estilos para los items del dropdown */
+.dropdown-item {
+    color: #7e6d5a; /* Texto oscuro para contraste y legibilidad */
+    padding: 10px 20px; /* Espaciado adecuado para mejor usabilidad */
+}
+
+    .dropdown-item:hover {
+        background-color: #c2b280; /* Color dorado al hacer hover */
+        color: #fff; /* Texto en blanco al hacer hover para mejor contraste */
+    }
+
+
+
+/* Estilos para el footer */
+.footer {
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, .1);
+}
+
+    .footer a:hover {
+        color: #c2b280 !important;
+        text-decoration: none;
+    }

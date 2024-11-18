@@ -1,0 +1,66 @@
+﻿@model IEnumerable<restaurante.Models.Compra>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Compras y Detalles</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/menu-styles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1 class="my-4">Compras y Detalles</h1>
+        <div class="text-end mb-4">
+            <a asp-action="Create" class="btn btn-primary btn-lg">Crear Nueva Compra</a>
+        </div>
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Compra #@item.IdCompra</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text"><strong>Fecha:</strong> @item.FechaCompra.ToString("dd/MM/yyyy")</p>
+                            <p class="card-text"><strong>Total:</strong> @item.Total.ToString("C")</p>
+                            <p class="card-text"><strong>Proveedor:</strong> @item.IdProveedorNavigation.Email</p>
+
+                            <h6 class="mt-4">Detalles de la Compra:</h6>
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Producto</th>
+                                        <th>Cantidad</th>
+                                        <th>Precio Unitario</th>
+                                        <th>Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var detalle in item.DetallesCompras)
+                                    {
+                                        <tr>
+                                            <td>@detalle.IdInventarioNavigation.Nombre</td>
+                                            <td>@detalle.Cantidad</td>
+                                            <td>@detalle.PrecioUnitario.ToString("C")</td>
+                                            <td>@((detalle.Cantidad * detalle.PrecioUnitario).ToString("C"))</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="card-footer">
+                            <div class="d-flex justify-content-between">
+                                <a asp-action="Delete" asp-route-id="@item.IdCompra" class="btn btn-danger btn-sm">Eliminar Compra</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

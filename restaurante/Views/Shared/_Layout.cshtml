@@ -1,0 +1,111 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Restaurante Gourmet</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" /> <!-- Estilos movidos a site.css -->
+    @RenderSection("Styles", required: false)
+</head>
+<body class="@(ViewData["HideHeaderAndFooter"] != null && (bool)ViewData["HideHeaderAndFooter"] ? "auth-page" : "")">
+    @if (!(ViewData["HideHeaderAndFooter"] as bool? ?? false))
+    {
+        <header>
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3">
+                <div class="container-fluid">
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Restaurante Gourmet</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                        <ul class="navbar-nav flex-grow-1">
+                            @if (User.IsInRole("administrador") || User.IsInRole("personal") || User.IsInRole("cliente"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Items" asp-action="Index">Menú</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="CategoriasMenu" asp-action="Index">Categorías</a>
+                                </li>
+                            }
+                            @if (User.IsInRole("administrador") || User.IsInRole("personal"))
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Gestión
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <li><a class="dropdown-item" asp-controller="Recetas" asp-action="Index">Recetas</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Inventarios" asp-action="Index">Inventario</a></li>
+                                        <li><a class="dropdown-item" asp-controller="DetallesCompras" asp-action="Index">Detalles Compras</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Compras" asp-action="Index">Compras</a></li>
+                                        
+                                    </ul>
+                                </li>
+                            }
+                            @if (User.IsInRole("administrador") || User.IsInRole("personal") || User.IsInRole("cliente"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Reservas" asp-action="Index">Reservas</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Pedidos" asp-action="Index">Pedidos</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="DetallesPedidos" asp-action="Index">Detalles Pedidos</a>
+                                </li>
+                            }
+                            @if (User.IsInRole("administrador") || User.IsInRole("personal") || User.IsInRole("proveedor"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Proveedores" asp-action="Index">Proveedores</a>
+                                </li>
+                            }
+                            @if (User.IsInRole("administrador"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Usuarios" asp-action="Index">Administrar Usuarios</a>
+                                </li>
+                            }
+                        </ul>
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <form asp-controller="Auth" asp-action="Logout" method="post">
+                                    <button type="submit" class="btn btn-link nav-link">Cerrar Sesión</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+    }
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    @if (!(ViewData["HideHeaderAndFooter"] as bool? ?? false))
+    {
+        <footer class="footer text-muted">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        &copy; 2024 - Restaurante Gourmet - Todos los derechos reservados
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-light">Política de Privacidad</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    }
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

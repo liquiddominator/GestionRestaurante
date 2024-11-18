@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewData["Title"]</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #fffcf6;
+            padding-top: 0;
+        }
+
+        .caqui-claro {
+            background-color: #e8e4d9;
+        }
+
+        .caqui-medio {
+            color: #c2b280;
+        }
+
+        .caqui-oscuro {
+            color: #7e6d5a;
+        }
+
+        .border-caqui {
+            border-color: #c2b280;
+        }
+    </style>
+</head>
+<body>
+
+    <main class="container mt-3">
+        <!-- Agregamos un margen superior pequeño -->
+        <section class="text-center mb-5">
+            <h1 class="display-4 fw-bold caqui-oscuro mb-3">Gourmet</h1>
+            <p class="lead caqui-medio fst-italic">Una sinfonía de sabores exquisitos</p>
+        </section>
+        <div class="row mb-5">
+            <div class="col-md-6 mb-4">
+                <div class="caqui-claro p-4 rounded shadow">
+                    <h2 class="h3 fw-semibold caqui-oscuro mb-3">Nuestra Filosofía</h2>
+                    <p class="caqui-oscuro">En Gourmet, elevamos la gastronomía a una forma de arte. Cada plato es una obra maestra cuidadosamente elaborada, fusionando sabores tradicionales con técnicas vanguardistas para crear experiencias culinarias inolvidables.</p>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="caqui-claro p-4 rounded shadow">
+                    <h2 class="h3 fw-semibold caqui-oscuro mb-3">La Experiencia</h2>
+                    <p class="caqui-oscuro">Sumérjase en un ambiente de elegancia atemporal. Nuestro servicio impecable y atención al detalle aseguran que cada visita sea una ocasión especial, perfecta para celebraciones íntimas o cenas de negocios distinguidas.</p>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mb-5">
+            @Html.ActionLink("Explorar Menú", "Index", "Items", null, new { @class = "btn btn-outline-secondary border-caqui caqui-oscuro me-2 mb-2" })
+            @Html.ActionLink("Reservar Mesa", "Index", "Reservas", null, new { @class = "btn btn-outline-secondary border-caqui caqui-oscuro mb-2" })
+        </div>
+        <div class="position-relative rounded overflow-hidden shadow mb-5" style="height: 400px;">
+            <img src="https://images.unsplash.com/photo-1458644267420-66bc8a5f21e4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cGxhdG8lMjBkZSUyMHJlc3RhdXJhbnRlfGVufDB8fDB8fHww" alt="Plato gourmet" class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover">
+            <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-dark bg-opacity-50">
+                <p class="text-white fs-4 fw-light fst-italic text-center px-3">"La cocina es un lenguaje mediante el cual se expresa armonía, creatividad, felicidad, belleza, poesía, complejidad, magia, humor, provocación, cultura."</p>
+            </div>
+        </div>
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

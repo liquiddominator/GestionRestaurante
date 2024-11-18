@@ -1,0 +1,86 @@
+﻿html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.auth-page {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-image: url('https://plus.unsplash.com/premium_photo-1661883237884-263e8de8869b?q=80&w=1789&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* El resto de tus estilos aquí... */
+
+body {
+    background-image: url('https://plus.unsplash.com/premium_photo-1661883237884-263e8de8869b?q=80&w=1789&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-container {
+    background-color: rgba(232, 228, 217, 0.9);
+    border-radius: 15px;
+    padding: 40px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    max-width: 450px;
+    width: 100%;
+    margin: auto;
+}
+
+.auth-logo {
+    font-size: 2.5rem;
+    color: #7e6d5a; /* Color marrón */
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+h2 {
+    color: #7e6d5a; /* Color marrón */
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-control {
+    border-radius: 20px;
+    padding: 10px 15px;
+}
+
+.btn-success {
+    background-color: #c2b280; /* Color beige claro */
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #fff; /* Texto blanco */
+}
+
+    .btn-success:hover {
+        background-color: #7e6d5a; /* Color marrón oscuro al pasar el mouse */
+        border: none;
+    }
+
+.text-success {
+    color: #7e6d5a; /* Marrón */
+}
+
+.mt-4 {
+    margin-top: 2rem;
+}

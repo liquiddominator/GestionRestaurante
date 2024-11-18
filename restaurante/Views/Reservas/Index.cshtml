@@ -1,0 +1,149 @@
+﻿@model restaurante.Controllers.ReservasMesasViewModel
+@{
+    ViewData["Title"] = "Gestión de Reservas y Mesas";
+}
+
+<div class="container-fluid py-4">
+    <h1 class="text-center mb-4">@ViewData["Title"]</h1>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="h5 mb-0">Reservas</h2>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Fecha y Hora</th>
+                                    <th>Mesa</th>
+                                    <th>Personas</th>
+                                    <th>Usuario</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Reservas)
+                                {
+                                    <tr>
+                                        <td>@item.IdReserva</td>
+                                        <td>@item.FechaHora.ToString("dd/MM/yyyy HH:mm")</td>
+                                        <td>@item.IdMesaNavigation.Numero</td>
+                                        <td>@item.NumeroPersonas</td>
+                                        <td>@item.IdUsuarioNavigation.Email</td>
+                                        <td><span class="badge bg-@(item.Estado == "Confirmada" ? "success" : "warning")">@item.Estado</span></td>
+                                        <td>
+                                            <div class="d-flex justify-content-around">
+                                                <a asp-action="Edit" asp-route-id="@item.IdReserva" class="btn btn-outline-primary btn-sm me-1" title="Editar">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a asp-action="Details" asp-route-id="@item.IdReserva" class="btn btn-outline-info btn-sm me-1" title="Detalles">
+                                                    <i class="fas fa-info-circle"></i>
+                                                </a>
+                                                <a asp-action="Delete" asp-route-id="@item.IdReserva" class="btn btn-outline-danger btn-sm" title="Eliminar">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-success text-white">
+                    <h2 class="h5 mb-0">Mesas</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        @foreach (var item in Model.Mesas)
+                        {
+                            <div class="col-md-6 mb-3">
+                                <div class="card h-100 border-@(item.Estado == "Disponible" ? "success" : "warning")">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Mesa #@item.Numero</h5>
+                                        <p class="card-text">
+                                            <strong>Capacidad:</strong> @item.Capacidad personas<br>
+                                            <strong>Estado:</strong> <span class="badge bg-@(item.Estado == "Disponible" ? "success" : "warning")">@item.Estado</span>
+                                        </p>
+                                    </div>
+                                    <div class="card-footer bg-transparent">
+                                        <div class="d-flex justify-content-around">
+                                            <a asp-action="EditMesa" asp-route-id="@item.IdMesa" class="btn btn-outline-primary btn-sm" title="Editar Mesa">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a asp-action="DeleteMesa" asp-route-id="@item.IdMesa" class="btn btn-outline-danger btn-sm" title="Eliminar Mesa">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6 mb-3">
+            <a asp-action="Create" class="btn btn-primary btn-lg d-block">
+                <i class="fas fa-plus-circle me-2"></i>Nueva Reserva
+            </a>
+        </div>
+        <div class="col-md-6 mb-3">
+            <a asp-action="CreateMesa" class="btn btn-success btn-lg d-block">
+                <i class="fas fa-plus-circle me-2"></i>Nueva Mesa
+            </a>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .card {
+            border: none;
+            transition: transform 0.2s;
+        }
+
+            .card:hover {
+                transform: translateY(-5px);
+            }
+
+        .table th {
+            border-top: none;
+        }
+
+        .btn-sm {
+            padding: .25rem .5rem;
+            font-size: .875rem;
+            line-height: 1.5;
+            border-radius: .2rem;
+        }
+
+        .btn-outline-primary:hover, .btn-outline-info:hover, .btn-outline-danger:hover {
+            color: #fff;
+        }
+
+        .btn-lg {
+            padding: .75rem 1.25rem;
+            font-size: 1.25rem;
+            line-height: 1.5;
+            border-radius: .3rem;
+        }
+    </style>
+}

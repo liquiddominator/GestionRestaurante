@@ -1,0 +1,44 @@
+﻿@model IEnumerable<restaurante.Models.Role>
+@{
+    ViewData["Title"] = "Roles";
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewData["Title"] - Restaurante</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/menu-styles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>@ViewData["Title"]</h1>
+        <div class="text-center mt-4 mb-4">
+            <a asp-action="Create" class="btn btn-primary btn-lg">Crear Nuevo</a>
+        </div>
+        <div class="row">
+            <div class="row">
+                @foreach (var item in Model)
+                {
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100" onclick="location.href='@Url.Action("Details", new { id = item.IdRol })'">
+                            <div class="card-body">
+                                <h5 class="card-title">@item.Nombre</h5>
+                                <p class="card-text">@item.Descripcion</p>
+                            </div>
+                            <div class="card-footer">
+                                <div class="button-container">
+                                    <a asp-action="Edit" asp-route-id="@item.IdRol" class="btn btn-primary">Editar</a>
+                                    <a asp-action="Delete" asp-route-id="@item.IdRol" class="btn btn-primary">Eliminar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

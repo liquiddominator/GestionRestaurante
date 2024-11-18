@@ -1,0 +1,75 @@
+﻿@model restaurante.Models.DetallesPedido
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>DetallesPedido</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="IdPedido" class="control-label"></label>
+                <select asp-for="IdPedido" class="form-control" asp-items="ViewBag.IdPedido"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdItem" class="control-label"></label>
+                <select asp-for="IdItem" class="form-control" asp-items="ViewBag.IdItem"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Cantidad" class="control-label"></label>
+                <input asp-for="Cantidad" class="form-control" id="cantidad" />
+                <span asp-validation-for="Cantidad" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PrecioUnitario" class="control-label"></label>
+                <input asp-for="PrecioUnitario" class="form-control" id="precioUnitario" />
+                <span asp-validation-for="PrecioUnitario" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Subtotal" class="control-label"></label>
+                <input asp-for="Subtotal" class="form-control" id="subtotal" readonly />
+                <span asp-validation-for="Subtotal" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Notas" class="control-label"></label>
+                <input asp-for="Notas" class="form-control" />
+                <span asp-validation-for="Notas" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const cantidadInput = document.getElementById('cantidad');
+            const precioUnitarioInput = document.getElementById('precioUnitario');
+            const subtotalInput = document.getElementById('subtotal');
+
+            function calcularSubtotal() {
+                const cantidad = parseFloat(cantidadInput.value) || 0;
+                const precioUnitario = parseFloat(precioUnitarioInput.value) || 0;
+                subtotalInput.value = (cantidad * precioUnitario).toFixed(2); // Calcula y formatea el subtotal
+            }
+
+            cantidadInput.addEventListener('input', calcularSubtotal);
+            precioUnitarioInput.addEventListener('input', calcularSubtotal);
+        });
+    </script>
+}

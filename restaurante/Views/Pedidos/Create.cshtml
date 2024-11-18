@@ -1,0 +1,73 @@
+﻿@model restaurante.Models.Pedido
+
+@{
+    ViewData["Title"] = "Crear Pedido";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="IdUsuario" class="control-label"></label>
+                <select asp-for="IdUsuario" class="form-control" asp-items="ViewBag.IdUsuario"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdMesa" class="control-label"></label>
+                <select asp-for="IdMesa" class="form-control" asp-items="ViewBag.IdMesa"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="FechaHora" class="control-label"></label>
+                <input asp-for="FechaHora" class="form-control" />
+                <span asp-validation-for="FechaHora" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Estado" class="control-label"></label>
+                <input asp-for="Estado" class="form-control" />
+                <span asp-validation-for="Estado" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MetodoPago" class="control-label"></label>
+                <input asp-for="MetodoPago" class="form-control" />
+                <span asp-validation-for="MetodoPago" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label for="Items">Seleccionar Ítems</label>
+                <select id="Items" name="IdItems" class="form-control" multiple asp-items="ViewBag.Items"></select>
+            </div>
+            <div id="cantidadesContainer"></div>
+            <div class="form-group">
+                <input type="submit" value="Crear" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Volver a la lista</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function () {
+            $('#Items').change(function () {
+                var selectedItems = $(this).val();
+                var container = $('#cantidadesContainer');
+                container.empty();
+
+                selectedItems.forEach(function (item) {
+                    container.append('<div class="form-group">' +
+                        '<label>Cantidad para item ' + item + '</label>' +
+                        '<input type="number" name="Cantidades" class="form-control" min="1" value="1" required />' +
+                        '</div>');
+                });
+            });
+        });
+    </script>
+}

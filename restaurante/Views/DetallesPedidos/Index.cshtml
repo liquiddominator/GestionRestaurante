@@ -1,0 +1,49 @@
+﻿@model IEnumerable<restaurante.Models.DetallesPedido>
+
+@{
+    ViewData["Title"] = "Detalles de Pedido";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewData["Title"]</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/menu-styles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>@ViewData["Title"]</h1>
+        <div class="text-center mb-4">
+            <a asp-action="Create" class="btn btn-primary btn-lg">Crear Nuevo Detalle</a>
+        </div>
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100" onclick="location.href='@Url.Action("Details", new { id = item.IdDetalle })'">
+                        <div class="card-body">
+                            <h5 class="card-title">Detalle #@item.IdDetalle</h5>
+                            <p class="card-text"><strong>Cantidad:</strong> @item.Cantidad</p>
+                            <p class="card-text"><strong>Precio Unitario:</strong> @item.PrecioUnitario.ToString("C")</p>
+                            <p class="card-text"><strong>Subtotal:</strong> @item.Subtotal.ToString("C")</p>
+                            <p class="card-text"><strong>Notas:</strong> @item.Notas</p>
+                            <p class="card-text"><strong>Ítem:</strong> @item.IdItemNavigation.Nombre</p>
+                            <p class="card-text"><strong>Pedido ID:</strong> @item.IdPedidoNavigation.IdPedido</p>
+                        </div>
+                        <div class="card-footer">
+                            <div class="button-container">
+                                <a asp-action="Edit" asp-route-id="@item.IdDetalle" class="btn btn-primary">Editar</a>
+                                <a asp-action="Delete" asp-route-id="@item.IdDetalle" class="btn btn-primary">Eliminar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

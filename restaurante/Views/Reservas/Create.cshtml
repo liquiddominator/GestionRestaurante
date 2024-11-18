@@ -1,0 +1,42 @@
+﻿@model restaurante.Models.Reserva
+<h4>Crear Reserva</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="IdMesa" class="control-label">Mesa</label>
+                <select asp-for="IdMesa" class="form-control" asp-items="ViewBag.IdMesa"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdUsuario" class="control-label">Usuario</label>
+                <input type="text" class="form-control" value="@ViewBag.UserEmail" readonly />
+                <input type="hidden" asp-for="IdUsuario" value="@ViewBag.IdUsuario" />
+            </div>
+            <div class="form-group">
+                <label asp-for="FechaHora" class="control-label">Fecha y Hora</label>
+                <input asp-for="FechaHora" class="form-control" type="datetime-local" />
+                <span asp-validation-for="FechaHora" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumeroPersonas" class="control-label">Número de Personas</label>
+                <input asp-for="NumeroPersonas" class="form-control" type="number" min="1" />
+                <span asp-validation-for="NumeroPersonas" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Estado" class="control-label">Estado</label>
+                <select asp-for="Estado" class="form-control">
+                    <option value="pendiente">Pendiente</option>
+                    <option value="confirmada">Confirmada</option>
+                    <option value="cancelada">Cancelada</option>
+                </select>
+                <span asp-validation-for="Estado" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-3">
+                <input type="submit" value="Crear" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
+            </div>
+        </form>
+    </div>
+</div>
