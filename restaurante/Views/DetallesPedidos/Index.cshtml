@@ -1,9 +1,7 @@
-﻿@model IEnumerable<restaurante.Models.DetallesPedido>
-
+﻿@model IEnumerable<restaurante.Models.Pedido>
 @{
-    ViewData["Title"] = "Detalles de Pedido";
+    ViewData["Title"] = "Registro de Pedidos";
 }
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -11,32 +9,70 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@ViewData["Title"]</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/css/menu-styles.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <h1>@ViewData["Title"]</h1>
-        <div class="text-center mb-4">
-            <a asp-action="Create" class="btn btn-primary btn-lg">Crear Nuevo Detalle</a>
-        </div>
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">@ViewData["Title"]</h1>
         <div class="row">
-            @foreach (var item in Model)
+            @foreach (var pedido in Model)
             {
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100" onclick="location.href='@Url.Action("Details", new { id = item.IdDetalle })'">
-                        <div class="card-body">
-                            <h5 class="card-title">Detalle #@item.IdDetalle</h5>
-                            <p class="card-text"><strong>Cantidad:</strong> @item.Cantidad</p>
-                            <p class="card-text"><strong>Precio Unitario:</strong> @item.PrecioUnitario.ToString("C")</p>
-                            <p class="card-text"><strong>Subtotal:</strong> @item.Subtotal.ToString("C")</p>
-                            <p class="card-text"><strong>Notas:</strong> @item.Notas</p>
-                            <p class="card-text"><strong>Ítem:</strong> @item.IdItemNavigation.Nombre</p>
-                            <p class="card-text"><strong>Pedido ID:</strong> @item.IdPedidoNavigation.IdPedido</p>
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">Pedido #@pedido.IdPedido</h5>
                         </div>
-                        <div class="card-footer">
-                            <div class="button-container">
-                                <a asp-action="Edit" asp-route-id="@item.IdDetalle" class="btn btn-primary">Editar</a>
-                                <a asp-action="Delete" asp-route-id="@item.IdDetalle" class="btn btn-primary">Eliminar</a>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <p><strong>Cliente:</strong> @pedido.IdUsuarioNavigation.Nombre @pedido.IdUsuarioNavigation.Apellido</p>
+                                <p><strong>Fecha:</strong> @pedido.FechaHora.ToString("dd/MM/yyyy HH:mm")</p>
+                                <p><strong>Método de Pago:</strong> @pedido.MetodoPago</p>
+                                <p>
+                                    <strong>Estado:</strong>
+                                    <span id="estado-@pedido.IdPedido">@pedido.Estado</span>
+                                    @if (User.IsInRole("personal"))
+                                    {
+                                        <button class="btn btn-sm btn-warning ms-2"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#estadoModal"
+                                                data-pedido-id="@pedido.IdPedido"
+                                                data-estado-actual="@pedido.Estado">
+                                            Cambiar Estado
+                                        </button>
+                                    }
+                                </p>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Ítem</th>
+                                            <th>Cantidad</th>
+                                            <th>P.Unit</th>
+                                            <th>Subtotal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var detalle in pedido.DetallesPedidos)
+                                        {
+                                            <tr>
+                                                <td>@detalle.IdItemNavigation.Nombre</td>
+                                                <td>@detalle.Cantidad</td>
+                                                <td>@detalle.PrecioUnitario.ToString("C")</td>
+                                                <td>@detalle.Subtotal.ToString("C")</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                                            <td><strong>@pedido.Total.ToString("C")</strong></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <div class="text-center">
+                                <button onclick="window.print()" class="btn btn-secondary">Imprimir</button>
+                                <a href="/DetallesPedidos/DescargarPdf/@pedido.IdPedido" class="btn btn-primary" target="_blank">Descargar PDF</a>
                             </div>
                         </div>
                     </div>
@@ -44,6 +80,54 @@
             }
         </div>
     </div>
+
+    <!-- Modal para cambiar estado -->
+    <div class="modal fade" id="estadoModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Cambiar Estado del Pedido</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="cambiarEstadoForm" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="modal-body">
+                        <input type="hidden" id="pedidoId" name="id" />
+                        <div class="mb-3">
+                            <label for="estado" class="form-label">Nuevo Estado:</label>
+                            <select class="form-select" id="estado" name="estado">
+                                @foreach (var estado in ViewBag.Estados)
+                                {
+                                    <option value="@estado">@estado</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var estadoModal = document.getElementById('estadoModal');
+            estadoModal.addEventListener('show.bs.modal', function (event) {
+                var button = event.relatedTarget;
+                var pedidoId = button.getAttribute('data-pedido-id');
+                var estadoActual = button.getAttribute('data-estado-actual');
+
+                var form = document.getElementById('cambiarEstadoForm');
+                form.action = '/DetallesPedidos/UpdateEstado';
+
+                document.getElementById('pedidoId').value = pedidoId;
+                document.getElementById('estado').value = estadoActual;
+            });
+        });
+    </script>
 </body>
 </html>

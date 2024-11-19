@@ -45,13 +45,13 @@ public partial class RestauranteWebContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=LIQUIDDOMINATOR;Database=restauranteWeb;User Id=LIQUIDDOMINATOR\\PC;Password='';Trusted_Connection=True;TrustServerCertificate=True;");
+        => optionsBuilder.UseSqlServer("Server=DESKTOP-D9IF75B\\SQL2019;Database=restauranteWeb;User Id=DESKTOP-D9IF75B\\T403-22;Password='';Trusted_Connection=True;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<CategoriasMenu>(entity =>
         {
-            entity.HasKey(e => e.IdCategoria).HasName("PK__categori__CD54BC5A8C8CABD6");
+            entity.HasKey(e => e.IdCategoria).HasName("PK__categori__CD54BC5AF43FE946");
 
             entity.ToTable("categorias_menu");
 
@@ -67,7 +67,7 @@ public partial class RestauranteWebContext : DbContext
 
         modelBuilder.Entity<Compra>(entity =>
         {
-            entity.HasKey(e => e.IdCompra).HasName("PK__compras__C4BAA604AF511B6D");
+            entity.HasKey(e => e.IdCompra).HasName("PK__compras__C4BAA6045C12CC70");
 
             entity.ToTable("compras");
 
@@ -82,12 +82,12 @@ public partial class RestauranteWebContext : DbContext
 
             entity.HasOne(d => d.IdProveedorNavigation).WithMany(p => p.Compras)
                 .HasForeignKey(d => d.IdProveedor)
-                .HasConstraintName("FK__compras__id_prov__66603565");
+                .HasConstraintName("FK__compras__id_prov__3F466844");
         });
 
         modelBuilder.Entity<DetallesCompra>(entity =>
         {
-            entity.HasKey(e => e.IdDetalleCompra).HasName("PK__detalles__BD16E27907FADDBE");
+            entity.HasKey(e => e.IdDetalleCompra).HasName("PK__detalles__BD16E2791EE70464");
 
             entity.ToTable("detalles_compra");
 
@@ -103,16 +103,16 @@ public partial class RestauranteWebContext : DbContext
 
             entity.HasOne(d => d.IdCompraNavigation).WithMany(p => p.DetallesCompras)
                 .HasForeignKey(d => d.IdCompra)
-                .HasConstraintName("FK__detalles___id_co__693CA210");
+                .HasConstraintName("FK__detalles___id_co__4222D4EF");
 
             entity.HasOne(d => d.IdInventarioNavigation).WithMany(p => p.DetallesCompras)
                 .HasForeignKey(d => d.IdInventario)
-                .HasConstraintName("FK__detalles___id_in__6A30C649");
+                .HasConstraintName("FK__detalles___id_in__4316F928");
         });
 
         modelBuilder.Entity<DetallesPedido>(entity =>
         {
-            entity.HasKey(e => e.IdDetalle).HasName("PK__detalles__4F1332DEC5970F08");
+            entity.HasKey(e => e.IdDetalle).HasName("PK__detalles__4F1332DED7F254EC");
 
             entity.ToTable("detalles_pedido");
 
@@ -132,16 +132,16 @@ public partial class RestauranteWebContext : DbContext
 
             entity.HasOne(d => d.IdItemNavigation).WithMany(p => p.DetallesPedidos)
                 .HasForeignKey(d => d.IdItem)
-                .HasConstraintName("FK__detalles___id_it__5BE2A6F2");
+                .HasConstraintName("FK__detalles___id_it__34C8D9D1");
 
             entity.HasOne(d => d.IdPedidoNavigation).WithMany(p => p.DetallesPedidos)
                 .HasForeignKey(d => d.IdPedido)
-                .HasConstraintName("FK__detalles___id_pe__5AEE82B9");
+                .HasConstraintName("FK__detalles___id_pe__33D4B598");
         });
 
         modelBuilder.Entity<Inventario>(entity =>
         {
-            entity.HasKey(e => e.IdInventario).HasName("PK__inventar__013AEB51275977D7");
+            entity.HasKey(e => e.IdInventario).HasName("PK__inventar__013AEB51FAAF1370");
 
             entity.ToTable("inventario");
 
@@ -164,7 +164,7 @@ public partial class RestauranteWebContext : DbContext
 
         modelBuilder.Entity<Item>(entity =>
         {
-            entity.HasKey(e => e.IdItem).HasName("PK__items__87C9438B003ED988");
+            entity.HasKey(e => e.IdItem).HasName("PK__items__87C9438B92D2C0A8");
 
             entity.ToTable("items");
 
@@ -191,16 +191,16 @@ public partial class RestauranteWebContext : DbContext
 
             entity.HasOne(d => d.IdCategoriaNavigation).WithMany(p => p.Items)
                 .HasForeignKey(d => d.IdCategoria)
-                .HasConstraintName("FK__items__id_catego__46E78A0C");
+                .HasConstraintName("FK__items__id_catego__1FCDBCEB");
         });
 
         modelBuilder.Entity<Mesa>(entity =>
         {
-            entity.HasKey(e => e.IdMesa).HasName("PK__mesas__68A1E159CFC2DAF4");
+            entity.HasKey(e => e.IdMesa).HasName("PK__mesas__68A1E15956D16608");
 
             entity.ToTable("mesas");
 
-            entity.HasIndex(e => e.Numero, "UQ__mesas__FC77F21175569712").IsUnique();
+            entity.HasIndex(e => e.Numero, "UQ__mesas__FC77F2116D5EEDE3").IsUnique();
 
             entity.Property(e => e.IdMesa).HasColumnName("id_mesa");
             entity.Property(e => e.Capacidad).HasColumnName("capacidad");
@@ -214,7 +214,7 @@ public partial class RestauranteWebContext : DbContext
 
         modelBuilder.Entity<Pedido>(entity =>
         {
-            entity.HasKey(e => e.IdPedido).HasName("PK__pedidos__6FF014893462A258");
+            entity.HasKey(e => e.IdPedido).HasName("PK__pedidos__6FF014894E76AEDE");
 
             entity.ToTable("pedidos");
 
@@ -238,16 +238,16 @@ public partial class RestauranteWebContext : DbContext
 
             entity.HasOne(d => d.IdMesaNavigation).WithMany(p => p.Pedidos)
                 .HasForeignKey(d => d.IdMesa)
-                .HasConstraintName("FK__pedidos__id_mesa__5812160E");
+                .HasConstraintName("FK__pedidos__id_mesa__30F848ED");
 
             entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.Pedidos)
                 .HasForeignKey(d => d.IdUsuario)
-                .HasConstraintName("FK__pedidos__id_usua__571DF1D5");
+                .HasConstraintName("FK__pedidos__id_usua__300424B4");
         });
 
         modelBuilder.Entity<Proveedore>(entity =>
         {
-            entity.HasKey(e => e.IdProveedor).HasName("PK__proveedo__8D3DFE2829E0EDB6");
+            entity.HasKey(e => e.IdProveedor).HasName("PK__proveedo__8D3DFE2884B38617");
 
             entity.ToTable("proveedores");
 
@@ -272,7 +272,7 @@ public partial class RestauranteWebContext : DbContext
 
         modelBuilder.Entity<Receta>(entity =>
         {
-            entity.HasKey(e => new { e.IdItem, e.IdInventario }).HasName("PK__recetas__87DAED3E1E46505F");
+            entity.HasKey(e => new { e.IdItem, e.IdInventario }).HasName("PK__recetas__87DAED3ED76F3926");
 
             entity.ToTable("recetas");
 
@@ -285,17 +285,17 @@ public partial class RestauranteWebContext : DbContext
             entity.HasOne(d => d.IdInventarioNavigation).WithMany(p => p.Receta)
                 .HasForeignKey(d => d.IdInventario)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__recetas__id_inve__619B8048");
+                .HasConstraintName("FK__recetas__id_inve__3A81B327");
 
             entity.HasOne(d => d.IdItemNavigation).WithMany(p => p.Receta)
                 .HasForeignKey(d => d.IdItem)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__recetas__id_item__60A75C0F");
+                .HasConstraintName("FK__recetas__id_item__398D8EEE");
         });
 
         modelBuilder.Entity<Reserva>(entity =>
         {
-            entity.HasKey(e => e.IdReserva).HasName("PK__reservas__423CBE5D93DDE6C3");
+            entity.HasKey(e => e.IdReserva).HasName("PK__reservas__423CBE5DDEADB9CF");
 
             entity.ToTable("reservas");
 
@@ -314,20 +314,20 @@ public partial class RestauranteWebContext : DbContext
 
             entity.HasOne(d => d.IdMesaNavigation).WithMany(p => p.Reservas)
                 .HasForeignKey(d => d.IdMesa)
-                .HasConstraintName("FK__reservas__id_mes__5165187F");
+                .HasConstraintName("FK__reservas__id_mes__2A4B4B5E");
 
             entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.Reservas)
                 .HasForeignKey(d => d.IdUsuario)
-                .HasConstraintName("FK__reservas__id_usu__5070F446");
+                .HasConstraintName("FK__reservas__id_usu__29572725");
         });
 
         modelBuilder.Entity<Role>(entity =>
         {
-            entity.HasKey(e => e.IdRol).HasName("PK__roles__6ABCB5E0C5CFC83E");
+            entity.HasKey(e => e.IdRol).HasName("PK__roles__6ABCB5E08B93A6A0");
 
             entity.ToTable("roles");
 
-            entity.HasIndex(e => e.Nombre, "UQ__roles__72AFBCC6A5E75243").IsUnique();
+            entity.HasIndex(e => e.Nombre, "UQ__roles__72AFBCC69F0CEFF7").IsUnique();
 
             entity.Property(e => e.IdRol).HasColumnName("id_rol");
             entity.Property(e => e.Descripcion)
@@ -341,11 +341,11 @@ public partial class RestauranteWebContext : DbContext
 
         modelBuilder.Entity<Usuario>(entity =>
         {
-            entity.HasKey(e => e.IdUsuario).HasName("PK__usuarios__4E3E04ADCE34DE69");
+            entity.HasKey(e => e.IdUsuario).HasName("PK__usuarios__4E3E04AD8B8C77E7");
 
             entity.ToTable("usuarios");
 
-            entity.HasIndex(e => e.Email, "UQ__usuarios__AB6E61647DB3AEAF").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__usuarios__AB6E61649CD8A467").IsUnique();
 
             entity.Property(e => e.IdUsuario).HasColumnName("id_usuario");
             entity.Property(e => e.Apellido)
@@ -375,7 +375,7 @@ public partial class RestauranteWebContext : DbContext
 
         modelBuilder.Entity<UsuarioRole>(entity =>
         {
-            entity.HasKey(e => e.IdUsuarioRol).HasName("PK__usuario___D1F881FE21362AD0");
+            entity.HasKey(e => e.IdUsuarioRol).HasName("PK__usuario___D1F881FE3B3F46B9");
 
             entity.ToTable("usuario_roles");
 
@@ -392,12 +392,12 @@ public partial class RestauranteWebContext : DbContext
             entity.HasOne(d => d.IdRolNavigation).WithMany(p => p.UsuarioRoles)
                 .HasForeignKey(d => d.IdRol)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__usuario_r__id_ro__412EB0B6");
+                .HasConstraintName("FK__usuario_r__id_ro__1A14E395");
 
             entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.UsuarioRoles)
                 .HasForeignKey(d => d.IdUsuario)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__usuario_r__id_us__403A8C7D");
+                .HasConstraintName("FK__usuario_r__id_us__1920BF5C");
         });
 
         OnModelCreatingPartial(modelBuilder);
