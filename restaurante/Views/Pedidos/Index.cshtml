@@ -17,13 +17,12 @@
             </div>
             <div class="form-group">
                 <label for="Estado">Estado</label>
-                <select name="Estado" class="form-control" disabled>
-                    <option value="pendiente">Pendiente</option>
-                    <option value="en_preparacion">En preparación</option>
-                    <option value="listo">Listo</option>
-                    <option value="entregado">Entregado</option>
-                    <option value="cancelado">Cancelado</option>
-                </select>
+                <div class="form-group">
+                    <label for="Estado">Estado</label>
+                    <select name="Estado" class="form-control" required readonly>
+                        <option value="pendiente" selected>Pendiente</option>
+                    </select>
+                </div>
             </div>
             <div class="form-group">
                 <label for="MetodoPago">Método de Pago</label>
