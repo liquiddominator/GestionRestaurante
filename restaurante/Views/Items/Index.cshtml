@@ -43,7 +43,7 @@
                 <div class="col-md-4 mb-4">
                     <div class="card h-100" onclick="location.href='@Url.Action("Details", new { id = item.IdItem })'">
                         <div class="card-img-container">
-                            <img src="@item.ImagenUrl" class="card-img-top" alt="Imagen de @item.Nombre">
+                            <img src="@Url.Content(item.ImagenUrl)" class="card-img-top" alt="Imagen de @item.Nombre">
                         </div>
                         <div class="card-body">
                             <h5 class="card-title">@item.Nombre</h5>
@@ -73,6 +73,7 @@
         {
             <div class="text-center mt-4">
                 @Html.ActionLink("Añadir Nuevo Plato", "Create", "Items", null, new { @class = "btn btn-primary btn-lg" })
+                @Html.ActionLink("Exportar a Excel", "ExportToExcel", "Items", null, new { @class = "btn btn-success btn-lg ms-2" })
             </div>
         }
         
