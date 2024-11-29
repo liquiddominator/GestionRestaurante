@@ -1,0 +1,204 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary">Dashboard</h2>
+        <div class="text-muted">@DateTime.Now.ToString("dddd, dd MMMM yyyy")</div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-12 col-lg-8">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">Ventas vs Compras (Últimos 30 días)</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="ventasComprasChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-lg-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">Ocupación de Mesas</h5>
+                </div>
+                <div class="card-body d-flex align-items-center justify-content-center">
+                    <canvas id="ocupacionChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mt-1">
+        <div class="col-12 col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Top 5 Platos Más Vendidos</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="platosChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">Tendencia de Ventas</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="tendenciaVentasChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script>
+        const colors = {
+            primary: '#4e73df',
+            success: '#1cc88a',
+            info: '#36b9cc',
+            warning: '#f6c23e',
+            danger: '#e74a3b',
+            secondary: '#858796',
+            light: '#f8f9fc',
+            dark: '#5a5c69'
+        };
+
+        // Gráfico combinado de Ventas y Compras
+        new Chart(document.getElementById('ventasComprasChart'), {
+            type: 'line',
+            data: {
+                labels: @Html.Raw(Json.Serialize(ViewBag.FechasPedidos)),
+                datasets: [{
+                    label: 'Ventas',
+                    data: @Html.Raw(Json.Serialize(ViewBag.TotalesPedidos)),
+                    borderColor: colors.primary,
+                    backgroundColor: 'rgba(78, 115, 223, 0.1)',
+                    fill: true
+                }, {
+                    label: 'Compras',
+                    data: @Html.Raw(Json.Serialize(ViewBag.TotalesCompras)),
+                    borderColor: colors.success,
+                    backgroundColor: 'rgba(28, 200, 138, 0.1)',
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                },
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function (value) {
+                                return '$ ' + value.toLocaleString();
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Gráfico de Ocupación (Dona)
+        new Chart(document.getElementById('ocupacionChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Ocupadas', 'Disponibles'],
+                datasets: [{
+                    data: @Html.Raw(Json.Serialize(ViewBag.OcupacionMesas)),
+                    backgroundColor: [colors.primary, colors.light],
+                    borderColor: [colors.primary, colors.secondary],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                cutout: '75%',
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                let total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                let percentage = Math.round((context.raw / total) * 100);
+                                return `${context.label}: ${context.raw} (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Gráfico de Platos Más Vendidos (Horizontal)
+        new Chart(document.getElementById('platosChart'), {
+            type: 'bar',
+            data: {
+                labels: @Html.Raw(Json.Serialize(ViewBag.NombresPlatos)),
+                datasets: [{
+                    label: 'Unidades vendidas',
+                    data: @Html.Raw(Json.Serialize(ViewBag.CantidadesPlatos)),
+                    backgroundColor: colors.info,
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+        // Gráfico de Tendencia de Ventas
+        new Chart(document.getElementById('tendenciaVentasChart'), {
+            type: 'line',
+            data: {
+                labels: @Html.Raw(Json.Serialize(ViewBag.FechasPedidos)),
+                datasets: [{
+                    label: 'Ventas diarias',
+                    data: @Html.Raw(Json.Serialize(ViewBag.TotalesPedidos)),
+                    borderColor: colors.warning,
+                    backgroundColor: 'rgba(246, 194, 62, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function (value) {
+                                return '$ ' + value.toLocaleString();
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+}
