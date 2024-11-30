@@ -1,4 +1,5 @@
-﻿@model IEnumerable<restaurante.Models.Item>
+﻿
+@model IEnumerable<restaurante.Models.Item>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -7,16 +8,268 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Menú Gourmet</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/css/menu-styles.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gold: #C6A87D;
+            --secondary-brown: #8B4513;
+            --light-cream: #FFF8F0;
+            --dark-brown: #3C2A21;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fff5e6 0%, #fff 100%);
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+
+        .menu-header {
+            background: linear-gradient(to right, var(--secondary-brown), var(--primary-gold));
+            padding: 3rem;
+            margin-bottom: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+            .menu-header::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="2" cy="2" r="1" fill="rgba(255,255,255,0.1)"/></svg>');
+                opacity: 0.3;
+            }
+
+            .menu-header h1 {
+                color: #fff;
+                font-size: 3.5rem;
+                font-weight: 700;
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+                margin: 0;
+                position: relative;
+            }
+
+        .category-filter {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            color: var(--dark-brown);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        select.form-control {
+            border: 2px solid #eee;
+            border-radius: 10px;
+            padding: 0.75rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: url("data:image/svg+xml,...") no-repeat right 1rem center;
+            cursor: pointer;
+        }
+
+            select.form-control:focus {
+                border-color: var(--primary-gold);
+                box-shadow: 0 0 0 0.25rem rgba(198, 168, 125, 0.25);
+            }
+
+        .menu-grid {
+            gap: 2rem;
+        }
+
+        .menu-item {
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            cursor: pointer;
+        }
+
+            .menu-item:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            }
+
+            .menu-item .card-img-container {
+                height: 200px;
+                overflow: hidden;
+            }
+
+                .menu-item .card-img-container img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    transition: transform 0.5s ease;
+                }
+
+            .menu-item:hover .card-img-container img {
+                transform: scale(1.1);
+            }
+
+            .menu-item .card-body {
+                padding: 1.5rem;
+                background: white;
+            }
+
+            .menu-item .card-title {
+                color: var(--dark-brown);
+                font-size: 1.5rem;
+                font-weight: 700;
+                margin-bottom: 1rem;
+            }
+
+            .menu-item .card-text {
+                color: #666;
+                margin-bottom: 0.5rem;
+            }
+
+            .menu-item .price {
+                color: var(--secondary-brown);
+                font-size: 1.25rem;
+                font-weight: 700;
+            }
+
+            .menu-item .category-badge {
+                background: var(--primary-gold);
+                color: white;
+                padding: 0.4rem 1rem;
+                border-radius: 50px;
+                font-size: 0.8rem;
+                display: inline-block;
+                margin-bottom: 0.5rem;
+            }
+
+            .menu-item .prep-time {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                color: #888;
+            }
+
+            .menu-item .availability {
+                display: inline-block;
+                padding: 0.4rem 1rem;
+                border-radius: 50px;
+                font-size: 0.8rem;
+                margin-top: 0.5rem;
+            }
+
+        .availability.available {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .availability.unavailable {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .card-footer {
+            background: #f8f9fa;
+            border-top: none;
+            padding: 1rem 1.5rem;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-custom {
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit {
+            background: var(--primary-gold);
+            color: white;
+            border: none;
+        }
+
+        .btn-delete {
+            background: #fff;
+            color: #dc3545;
+            border: 2px solid #dc3545;
+        }
+
+        .btn-add {
+            background: var(--secondary-brown);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+        }
+
+        .btn-export {
+            background: var(--primary-gold);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+        }
+
+        .admin-actions {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-top: 3rem;
+        }
+
+        @@media (max-width: 768px) {
+            .menu-header {
+                padding: 2rem;
+                margin-bottom: 2rem;
+            }
+
+                .menu-header h1 {
+                    font-size: 2.5rem;
+                }
+
+            .menu-grid {
+                gap: 1rem;
+            }
+        }
+
+        .col-lg-custom {
+    flex: 0 0 29%; /* Ajusta el ancho según el porcentaje deseado */
+    max-width: 29%;
+}
+
+@@media (min-width: 992px) { /* Solo aplica en pantallas grandes o superiores */
+    .menu-grid.g-3 .col-lg-custom {
+        margin-right: calc(3 * 0.5rem); /* Ajustar el gap horizontal si es necesario */
+    }
+}
+
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>Nuestro Menú Gourmet</h1>
+        <!-- Header -->
+        <div class="menu-header text-center">
+            <h1><i class="fas fa-utensils me-3"></i>Nuestro Menú Gourmet</h1>
+        </div>
 
-        <!-- Filtro por categorías -->
-        <form method="get" asp-action="Index">
-            <div class="form-group">
-                <label for="categoriaId">Filtrar por Categoría:</label>
+        <!-- Category Filter -->
+        <div class="category-filter">
+            <form method="get" asp-action="Index" class="mb-0">
+                <label class="filter-label" for="categoriaId">
+                    <i class="fas fa-filter me-2"></i>Filtrar por Categoría
+                </label>
                 <select class="form-control" id="categoriaId" name="categoriaId" onchange="this.form.submit()">
                     <option value="">Todas las categorías</option>
                     @foreach (var categoria in (IEnumerable<SelectListItem>)ViewData["Categorias"])
@@ -30,53 +283,67 @@
                             <option value="@categoria.Value">@categoria.Text</option>
                         }
                     }
-                </select><br />
+                </select>
+            </form>
+        </div>
 
-
-
-            </div>
-        </form>
-
-        <div class="row">
+        <div class="row menu-grid g-3">
+            <!-- Gap de 3 para menor espaciado -->
             @foreach (var item in Model)
             {
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100" onclick="location.href='@Url.Action("Details", new { id = item.IdItem })'">
+                <div class="col-12 col-sm-6 col-lg-custom">
+                    <!-- Usamos la clase personalizada -->
+                    <div class="card menu-item h-100" onclick="location.href='@Url.Action("Details", new { id = item.IdItem })'">
                         <div class="card-img-container">
-                            <img src="@Url.Content(item.ImagenUrl)" class="card-img-top" alt="Imagen de @item.Nombre">
+                            <img src="@Url.Content(item.ImagenUrl)" alt="@item.Nombre">
                         </div>
                         <div class="card-body">
                             <h5 class="card-title">@item.Nombre</h5>
+                            <span class="category-badge">
+                                <i class="fas fa-tag me-2"></i>@item.IdCategoriaNavigation.Nombre
+                            </span>
                             <p class="card-text">@item.Descripcion</p>
-                            <p class="card-text"><strong>Precio:</strong> @item.Precio.ToString("C")</p>
-                            <p class="card-text"><strong>Categoría:</strong> @item.IdCategoriaNavigation.Nombre</p>
-                            <p class="card-text"><strong>Tiempo de preparación:</strong> @item.TiempoPreparacion min</p>
-                            <p class="card-text">
-                                <strong>Disponible:</strong>
-                                @(item.Disponible == null ? "Consultar" : (item.Disponible.Value ? "Sí" : "No"))
-                            </p>
+                            <div class="price">@item.Precio.ToString("C")</div>
+                            <div class="prep-time">
+                                <i class="far fa-clock"></i>
+                                <span>@item.TiempoPreparacion minutos</span>
+                            </div>
+                            <div class="availability @(item.Disponible == true ? "available" : "unavailable")">
+                                <i class="fas @(item.Disponible == true ? "fa-check-circle" : "fa-times-circle") me-2"></i>
+                                @(item.Disponible == null ? "Consultar" : (item.Disponible.Value ? "Disponible" : "No Disponible"))
+                            </div>
                         </div>
-                        <div class="card-footer">
-                            @if (User.IsInRole("administrador") || User.IsInRole("personal"))
-                            {
+                        @if (User.IsInRole("administrador") || User.IsInRole("personal"))
+                        {
+                            <div class="card-footer">
                                 <div class="button-container">
-                                    <a href="@Url.Action("Edit", new { id = item.IdItem })" class="btn btn-primary">Editar</a>
-                                    <a href="@Url.Action("Delete", new { id = item.IdItem })" class="btn btn-primary">Eliminar</a>
+                                    <a href="@Url.Action("Edit", new { id = item.IdItem })" class="btn btn-custom btn-edit">
+                                        <i class="fas fa-edit me-2"></i>Editar
+                                    </a>
+                                    <a href="@Url.Action("Delete", new { id = item.IdItem })" class="btn btn-custom btn-delete">
+                                        <i class="fas fa-trash me-2"></i>Eliminar
+                                    </a>
                                 </div>
-                            }
-                        </div>
+                            </div>
+                        }
                     </div>
                 </div>
             }
         </div>
+
+
+
         @if (User.IsInRole("administrador") || User.IsInRole("personal"))
         {
-            <div class="text-center mt-4">
-                @Html.ActionLink("Añadir Nuevo Plato", "Create", "Items", null, new { @class = "btn btn-primary btn-lg" })
-                @Html.ActionLink("Exportar a Excel", "ExportToExcel", "Items", null, new { @class = "btn btn-success btn-lg ms-2" })
+            <div class="admin-actions text-center">
+                <a href="@Url.Action("Create", "Items")" class="btn btn-custom btn-add me-3">
+                    <i class="fas fa-plus me-2"></i>Añadir Nuevo Plato
+                </a>
+                <a href="@Url.Action("ExportToExcel", "Items")" class="btn btn-custom btn-export">
+                    <i class="fas fa-file-excel me-2"></i>Exportar a Excel
+                </a>
             </div>
         }
-        
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>

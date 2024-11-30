@@ -82,15 +82,6 @@
                     </li>
                 }
 
-                @if (User.IsInRole("administrador") || User.IsInRole("personal") || User.IsInRole("proveedor"))
-                {
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Proveedores" asp-action="Index">
-                            <i class="fas fa-truck"></i> <span>Proveedores</span>
-                        </a>
-                    </li>
-                }
-
                 @if (User.IsInRole("administrador"))
                 {
                     <li class="nav-item">
@@ -109,22 +100,100 @@
 
         <!-- Main Content -->
         <div class="main-content" id="main-content">
-            <!-- Removemos el botón de toggle del header -->
-            <div class="top-header">
-                <div class="user-menu">
-                    <span class="user-name">@User.Identity?.Name</span>
-                    <form asp-controller="Auth" asp-action="Logout" method="post" class="d-inline">
-                        <button type="submit" class="btn btn-link">
-                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-                        </button>
-                    </form>
-                </div>
-            </div>
-
-            <div class="container">
-                @RenderBody()
-            </div>
+	        <div class="top-header">
+		        <div class="header-content">
+			        <!-- Left side - Title -->
+			        <div class="page-title">
+				        <h4 class="mb-0">@ViewData["Title"]</h4>
+			        </div>
+            
+			        <!-- Right side - User Menu -->
+			        <div class="user-menu">
+				        <div class="user-info">
+					        <i class="fas fa-user-circle me-2"></i>
+					        <span class="user-name">@User.Identity?.Name</span>
+					        <form asp-controller="Auth" asp-action="Logout" method="post" class="d-inline ms-3">
+						        <button type="submit" class="logout-btn">
+							        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+						        </button>
+					        </form>
+				        </div>
+			        </div>
+		        </div>
+	        </div>
+    
+	        <div class="container">
+		        @RenderBody()
+	        </div>
         </div>
+
+        <!-- Agrega esta sección de estilos en el head del Layout.cshtml -->
+        <style>
+    .top-header {
+        background-color: white;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        padding: 1rem 2rem;
+        margin-bottom: 2rem;
+        border-radius: 0.5rem;
+    }
+
+            .header-content {
+                display: flex;
+                justify-content: space-between; /* Mantiene la separación entre título y menú */
+                align-items: center;
+                width: 100%; /* Asegura que los elementos ocupen toda la fila */
+            }
+
+    .page-title h4 {
+        color: var(--text-color);
+        font-weight: 600;
+    }
+
+            .user-menu {
+                display: flex;
+                align-items: center;
+                justify-content: flex-end; /* Alinea los elementos al final del contenedor */
+                flex-grow: 1; /* Permite que tome todo el espacio disponible a la derecha */
+            }
+
+    .user-info {
+        display: flex;
+        align-items: center;
+        color: var(--text-color);
+    }
+
+    .user-name {
+        font-weight: 500;
+    }
+
+            .logout-btn {
+                margin-left: 1rem; /* Añade espacio entre el nombre del usuario y el botón de cerrar sesión */
+                background: none;
+                border: none;
+                color: var(--text-color);
+                padding: 0.5rem 1rem;
+                border-radius: 0.5rem;
+                transition: all 0.3s ease;
+            }
+
+                .logout-btn:hover {
+                    background-color: #f8f9fa;
+                    color: var(--primary-color);
+                }
+
+    @@media (max-width: 768px) {
+        .top-header {
+            padding: 1rem;
+        }
+
+        .user-name {
+            max-width: 120px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+</style>
 
         <footer class="app-footer" id="appFooter">
             <div class="container">

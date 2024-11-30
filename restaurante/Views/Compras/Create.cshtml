@@ -1,28 +1,26 @@
-﻿@model restaurante.Controllers.CompraViewModel
-
+﻿@* Create.cshtml *@
+@model restaurante.Controllers.CompraViewModel
 <h4>Crear Compra</h4>
 <hr />
 <form asp-action="Create">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group mb-3">
-        <label asp-for="IdProveedor" class="form-label">Proveedor</label>
-        <select asp-for="IdProveedor" class="form-select" asp-items="ViewBag.IdProveedor">
+        <label asp-for="IdUsuario" class="form-label">Proveedor</label>
+        <select asp-for="IdUsuario" class="form-select" asp-items="ViewBag.IdUsuario">
             <option value="">-- Seleccione un proveedor --</option>
         </select>
-        <span asp-validation-for="IdProveedor" class="text-danger"></span>
+        <span asp-validation-for="IdUsuario" class="text-danger"></span>
     </div>
     <div class="form-group mb-3">
         <label asp-for="FechaCompra" class="form-label">Fecha de Compra</label>
         <input asp-for="FechaCompra" class="form-control" type="date" />
         <span asp-validation-for="FechaCompra" class="text-danger"></span>
     </div>
-
     <h5 class="mt-4">Detalles de la Compra</h5>
     <div id="detalles-container" class="mb-3">
         <!-- Los detalles se agregarán aquí dinámicamente -->
     </div>
     <button type="button" id="agregar-detalle" class="btn btn-secondary mb-3">Agregar Detalle</button>
-
     <div class="form-group">
         <input type="submit" value="Crear Compra" class="btn btn-primary" />
         <a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
@@ -35,7 +33,6 @@
     }
     <script>
         let detalleIndex = 0;
-
         function agregarDetalle() {
             const container = document.getElementById('detalles-container');
             const detalle = document.createElement('div');
@@ -60,14 +57,10 @@
             container.appendChild(detalle);
             detalleIndex++;
         }
-
         function eliminarDetalle(button) {
             button.closest('.row').remove();
         }
-
         document.getElementById('agregar-detalle').addEventListener('click', agregarDetalle);
-
-        // Agregar un detalle inicial al cargar la página
         document.addEventListener('DOMContentLoaded', function () {
             agregarDetalle();
         });

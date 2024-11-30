@@ -1,5 +1,5 @@
-﻿@model IEnumerable<restaurante.Models.Compra>
-
+﻿@* Index.cshtml *@
+@model IEnumerable<restaurante.Models.Compra>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -26,8 +26,10 @@
                         <div class="card-body">
                             <p class="card-text"><strong>Fecha:</strong> @item.FechaCompra.ToString("dd/MM/yyyy")</p>
                             <p class="card-text"><strong>Total:</strong> @item.Total.ToString("C")</p>
-                            <p class="card-text"><strong>Proveedor:</strong> @item.IdProveedorNavigation.Email</p>
-
+                            <p class="card-text">
+                                <strong>Proveedor:</strong>
+                                @($"{item.IdUsuarioNavigation.Nombre} {item.IdUsuarioNavigation.Apellido} ({item.IdUsuarioNavigation.Email})")
+                            </p>
                             <h6 class="mt-4">Detalles de la Compra:</h6>
                             <table class="table table-sm">
                                 <thead>

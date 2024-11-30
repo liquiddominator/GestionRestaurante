@@ -23,6 +23,36 @@
                 box-shadow: 0 4px 8px rgba(0,0,0,0.1);
                 transform: translateY(-5px);
             }
+
+        .role-section {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+        }
+
+        .role-title {
+            padding: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #0d6efd;
+            color: #0d6efd;
+        }
+
+        .section-administrador {
+            background-color: #f8d7da;
+        }
+
+        .section-personal {
+            background-color: #d1e7dd;
+        }
+
+        .section-cliente {
+            background-color: #cfe2ff;
+        }
+
+        .section-proveedor {
+            background-color: #fff3cd;
+        }
     </style>
 </head>
 <body>
@@ -44,40 +74,57 @@
 
         <div class="row">
             <div class="col-md-8">
-                <h3 class="text-center mb-3">Usuarios</h3>
-                <div class="row">
-                    @foreach (var usuario in Model.Usuarios)
+                <h3 class="text-center mb-3">Usuarios por Roles</h3>
+
+                @foreach (var role in Model.Roles)
+                {
+                    var usuariosConRol = Model.Usuarios.Where(u =>
+                    u.UsuarioRoles.Any(ur => ur.IdRol == role.IdRol)).ToList();
+
+                    if (usuariosConRol.Any())
                     {
-                        <div class="col-md-6 mb-3">
-                            <div class="card user-card h-100">
-                                <div class="card-header bg-primary text-white">
-                                    <h5 class="card-title mb-0">@usuario.Nombre @usuario.Apellido</h5>
-                                </div>
-                                <div class="card-body">
-                                    <p class="card-text"><i class="fas fa-envelope"></i> @usuario.Email</p>
-                                    <p class="card-text"><i class="fas fa-calendar-alt"></i> Creado: @usuario.FechaCreacion?.ToString("dd/MM/yyyy")</p>
-                                    <p class="card-text"><i class="fas fa-clock"></i> Último acceso: @(usuario.UltimoAcceso?.ToString("dd/MM/yyyy HH:mm") ?? "N/A")</p>
-                                    <p class="card-text"><strong>Roles:</strong></p>
-                                    <div>
-                                        @foreach (var usuarioRole in usuario.UsuarioRoles)
-                                        {
-                                            <span class="badge bg-info role-badge">@usuarioRole.IdRolNavigation.Nombre</span>
-                                        }
+                        <div class="role-section section-@role.Nombre.ToLower()">
+                            <h4 class="role-title">
+                                <i class="fas fa-users"></i>
+                                @role.Nombre (@usuariosConRol.Count usuarios)
+                            </h4>
+                            <div class="row">
+                                @foreach (var usuario in usuariosConRol)
+                                {
+                                    <div class="col-md-6 mb-3">
+                                        <div class="card user-card h-100">
+                                            <div class="card-header bg-primary text-white">
+                                                <h5 class="card-title mb-0">@usuario.Nombre @usuario.Apellido</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <p class="card-text"><i class="fas fa-envelope"></i> @usuario.Email</p>
+                                                <p class="card-text"><i class="fas fa-calendar-alt"></i> Creado: @usuario.FechaCreacion?.ToString("dd/MM/yyyy")</p>
+                                                <p class="card-text"><i class="fas fa-clock"></i> Último acceso: @(usuario.UltimoAcceso?.ToString("dd/MM/yyyy HH:mm") ?? "N/A")</p>
+                                                <p class="card-text"><strong>Roles:</strong></p>
+                                                <div>
+                                                    @foreach (var usuarioRole in usuario.UsuarioRoles)
+                                                    {
+                                                        <span class="badge bg-info role-badge">@usuarioRole.IdRolNavigation.Nombre</span>
+                                                    }
+                                                </div>
+                                            </div>
+                                            <div class="card-footer">
+                                                <a asp-action="Edit" asp-route-id="@usuario.IdUsuario" class="btn btn-warning btn-sm">
+                                                    <i class="fas fa-edit"></i> Editar
+                                                </a>
+                                                <a asp-action="Delete" asp-route-id="@usuario.IdUsuario" class="btn btn-danger btn-sm float-end">
+                                                    <i class="fas fa-trash-alt"></i> Eliminar
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="card-footer">
-                                    <a asp-action="Edit" asp-route-id="@usuario.IdUsuario" class="btn btn-warning btn-sm">
-                                        <i class="fas fa-edit"></i> Editar
-                                    </a>
-                                    <a asp-action="Delete" asp-route-id="@usuario.IdUsuario" class="btn btn-danger btn-sm float-end">
-                                        <i class="fas fa-trash-alt"></i> Eliminar
-                                    </a>
-                                </div>
+                                }
                             </div>
                         </div>
                     }
-                </div>
+                }
             </div>
+
             <div class="col-md-4">
                 <h3 class="text-center mb-3">Roles</h3>
                 <div class="table-responsive">
