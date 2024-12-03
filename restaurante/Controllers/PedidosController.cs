@@ -24,15 +24,28 @@ namespace restaurante.Controllers
         // GET: Pedidos
         public async Task<IActionResult> Index()
         {
-            var pedidosConDetalles = await _context.Pedidos
-                .Include(p => p.IdUsuarioNavigation)
-                .Include(p => p.DetallesPedidos)
-                    .ThenInclude(d => d.IdItemNavigation)
-                .ToListAsync();
-
-            var currentUserEmail = User.FindFirstValue(ClaimTypes.Email);
+            var currentUserEmail = User.Identity.Name;
             var currentUser = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == currentUserEmail);
 
+            // Construimos la consulta base
+            var query = _context.Pedidos.AsQueryable();
+
+            // Aplicamos los includes
+            query = query
+                .Include(p => p.IdUsuarioNavigation)
+                .Include(p => p.DetallesPedidos)
+                .ThenInclude(d => d.IdItemNavigation);
+
+            // Filtramos si es cliente
+            if (User.IsInRole("cliente"))
+            {
+                query = query.Where(p => p.IdUsuario == currentUser.IdUsuario);
+            }
+
+            // Ejecutamos la consulta
+            var pedidosConDetalles = await query.ToListAsync();
+
+            // Preparamos los ViewData
             ViewData["IdUsuario"] = new SelectList(_context.Usuarios, "IdUsuario", "Email");
             ViewData["IdItem"] = new SelectList(_context.Items, "IdItem", "Nombre");
             ViewData["CurrentUserId"] = currentUser?.IdUsuario;
@@ -51,11 +64,24 @@ namespace restaurante.Controllers
             var pedido = await _context.Pedidos
                 .Include(p => p.IdUsuarioNavigation)
                 .Include(p => p.DetallesPedidos)
-                    .ThenInclude(d => d.IdItemNavigation)
+                .ThenInclude(d => d.IdItemNavigation)
                 .FirstOrDefaultAsync(m => m.IdPedido == id);
+
             if (pedido == null)
             {
                 return NotFound();
+            }
+
+            // Verificar si el usuario es cliente y si el pedido le pertenece
+            if (User.IsInRole("cliente"))
+            {
+                var currentUserEmail = User.Identity.Name;
+                var currentUser = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == currentUserEmail);
+
+                if (pedido.IdUsuario != currentUser.IdUsuario)
+                {
+                    return Forbid(); // O puedes redirigir a una página de acceso denegado
+                }
             }
 
             return View(pedido);

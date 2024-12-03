@@ -1,0 +1,231 @@
+﻿@model restaurante.Controllers.CarritoViewModel
+<div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title">
+            <i class="fas fa-shopping-cart me-2"></i>Mi Carrito
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body p-3">
+        @if (!Model.Pedidos.Any())
+        {
+            <div class="text-center py-4">
+                <i class="fas fa-shopping-basket fa-3x mb-3"></i>
+                <p>Tu carrito está vacío</p>
+            </div>
+        }
+        else
+        {
+            <div class="cart-items">
+                @foreach (var pedido in Model.Pedidos)
+                {
+                    <div class="cart-item mb-3">
+                        <div class="cart-item-header">
+                            <span class="pedido-badge">Pedido #@pedido.IdPedido</span>
+                            <!-- Botón eliminar pedido -->
+                            <button type="button" class="btn btn-sm btn-eliminar-pedido"
+                                    data-pedido-id="@pedido.IdPedido">
+	                            <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+
+                        <div class="items-list">
+                            @foreach (var detalle in pedido.DetallesPedidos)
+                            {
+                                <div class="item-row">
+                                    <div class="item-info">
+                                        <div class="item-name">@detalle.IdItemNavigation.Nombre</div>
+                                        <small>Cant: @detalle.Cantidad</small>
+                                    </div>
+                                    <div class="item-price">
+                                        <div class="subtotal">@detalle.Subtotal.ToString("C")</div>
+                                        <small>@detalle.PrecioUnitario.ToString("C")/u</small>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="pedido-footer">
+                            <div class="pedido-info">
+                                <small>
+                                    <i class="fas fa-clock me-1"></i>@pedido.FechaHora.ToString("dd/MM HH:mm")
+                                    <span class="mx-2">|</span>
+                                    <i class="fas fa-info-circle me-1"></i>@pedido.Estado
+                                </small>
+                            </div>
+                            <div class="pedido-total">
+                                Total: @pedido.Total.ToString("C")
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="cart-summary">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Total del Carrito:</h5>
+                    <h5 class="mb-0">@Model.TotalCarrito.ToString("C")</h5>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    /* Colores principales */
+    :root {
+        --primary-brown: #8B7355;
+        --light-brown: #A89070;
+        --lighter-brown: #D4C4A8;
+        --bg-beige: #F5F2ED;
+        --text-brown: #4A3C28;
+    }
+
+    .modal-content {
+        background-color: var(--bg-beige);
+    }
+
+    .modal-header {
+        background-color: var(--primary-brown);
+        color: white;
+        border-bottom: none;
+    }
+
+    .cart-items {
+        max-height: 60vh;
+        overflow-y: auto;
+        padding: 10px;
+    }
+
+    .cart-item {
+        background-color: white;
+        border: 1px solid var(--lighter-brown);
+        border-radius: 8px;
+        margin-bottom: 15px;
+        overflow: hidden;
+    }
+
+    .cart-item-header {
+        background-color: var(--light-brown);
+        color: white;
+        padding: 8px 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .pedido-badge {
+        font-weight: 500;
+    }
+
+    .btn-eliminar-pedido {
+        color: white;
+        border: none;
+        background: transparent;
+        opacity: 0.8;
+        transition: opacity 0.3s;
+    }
+
+        .btn-eliminar-pedido:hover {
+            opacity: 1;
+        }
+
+    .items-list {
+        max-height: 200px;
+        overflow-y: auto;
+        padding: 5px;
+    }
+
+    .item-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid var(--lighter-brown);
+    }
+
+        .item-row:hover {
+            background-color: var(--bg-beige);
+        }
+
+    .item-info {
+        width: 40%;
+    }
+
+    .item-name {
+        color: var(--text-brown);
+        font-weight: 500;
+    }
+
+    .item-price {
+        width: 30%;
+        text-align: right;
+    }
+
+    .subtotal {
+        color: var(--text-brown);
+    }
+
+    small {
+        color: var(--light-brown);
+    }
+
+    .btn-delete {
+        background: none;
+        border: none;
+        color: var(--light-brown);
+        padding: 5px;
+        transition: color 0.3s;
+    }
+
+        .btn-delete:hover {
+            color: #dc3545;
+        }
+
+    .pedido-footer {
+        background-color: var(--bg-beige);
+        padding: 10px 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid var(--lighter-brown);
+    }
+
+    .pedido-total {
+        color: var(--text-brown);
+        font-weight: 600;
+    }
+
+    .cart-summary {
+        background-color: var(--primary-brown);
+        color: white;
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 20px;
+    }
+
+    /* Scrollbar personalizado */
+    .items-list::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    .items-list::-webkit-scrollbar-track {
+        background: var(--bg-beige);
+    }
+
+    .items-list::-webkit-scrollbar-thumb {
+        background: var(--light-brown);
+        border-radius: 5px;
+    }
+
+    .modal-header .btn-close {
+        background-color: transparent;
+        border: none;
+        opacity: 0.8;
+        filter: brightness(2);
+    }
+
+        .modal-header .btn-close:hover {
+            opacity: 1;
+        }
+</style>

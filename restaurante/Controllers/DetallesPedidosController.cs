@@ -21,14 +21,33 @@ namespace restaurante.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var pedidosConDetalles = await _context.Pedidos
+            var currentUserEmail = User.Identity.Name;
+            var currentUser = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == currentUserEmail);
+
+            // Construimos la consulta base
+            var query = _context.Pedidos.AsQueryable();
+
+            // Aplicamos los includes y el ordenamiento
+            query = query
                 .Include(p => p.IdUsuarioNavigation)
                 .Include(p => p.DetallesPedidos)
-                    .ThenInclude(d => d.IdItemNavigation)
-                .OrderByDescending(p => p.FechaHora)
-                .ToListAsync();
+                .ThenInclude(d => d.IdItemNavigation);
+
+            // Filtramos si es cliente
+            if (User.IsInRole("cliente"))
+            {
+                query = query.Where(p => p.IdUsuario == currentUser.IdUsuario);
+            }
+
+            // Aplicamos el ordenamiento después del filtrado
+            var pedidosOrdenados = query.OrderByDescending(p => p.FechaHora);
+
+            // Ejecutamos la consulta
+            var pedidosConDetalles = await pedidosOrdenados.ToListAsync();
 
             ViewBag.Estados = new List<string> { "pendiente", "en_preparacion", "listo", "entregado", "cancelado" };
+            ViewBag.IsCliente = User.IsInRole("cliente");
+
             return View(pedidosConDetalles);
         }
 
@@ -272,12 +291,27 @@ namespace restaurante.Controllers
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
+
             var pedido = await _context.Pedidos
                 .Include(p => p.IdUsuarioNavigation)
                 .Include(p => p.DetallesPedidos)
-                    .ThenInclude(d => d.IdItemNavigation)
+                .ThenInclude(d => d.IdItemNavigation)
                 .FirstOrDefaultAsync(m => m.IdPedido == id);
+
             if (pedido == null) return NotFound();
+
+            // Verificar si el usuario es cliente y si el pedido le pertenece
+            if (User.IsInRole("cliente"))
+            {
+                var currentUserEmail = User.Identity.Name;
+                var currentUser = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == currentUserEmail);
+
+                if (pedido.IdUsuario != currentUser.IdUsuario)
+                {
+                    return Forbid(); // O puedes redirigir a una página de acceso denegado
+                }
+            }
+
             return View(pedido);
         }
 
