@@ -199,6 +199,22 @@
                 plugins: {
                     legend: {
                         position: 'top'
+                    },
+                    annotation: {
+                        annotations: {
+                            currentDay: {
+                                type: 'line',
+                                xMin: '@DateTime.Now.ToString("dd/MM")',
+                                xMax: '@DateTime.Now.ToString("dd/MM")',
+                                borderColor: 'red',
+                                borderWidth: 2,
+                                label: {
+                                    content: 'Día Actual',
+                                    display: true,
+                                    position: 'top'
+                                }
+                            }
+                        }
                     }
                 },
                 scales: {
@@ -210,6 +226,10 @@
                             }
                         }
                     }
+                },
+                hover: {
+                    mode: 'nearest',
+                    intersect: true
                 }
             }
         });
@@ -269,18 +289,16 @@
             }
         });
 
-        // Gráfico de Tendencia de Ventas
+        // Reemplazar el gráfico de Tendencia de Ventas
         new Chart(document.getElementById('tendenciaVentasChart'), {
-            type: 'line',
+            type: 'bar',
             data: {
-                labels: @Html.Raw(Json.Serialize(ViewBag.FechasPedidos)),
+                labels: @Html.Raw(Json.Serialize(ViewBag.NombresProductosComprados)),
                 datasets: [{
-                    label: 'Ventas diarias',
-                    data: @Html.Raw(Json.Serialize(ViewBag.TotalesPedidos)),
-                    borderColor: colors.warning,
-                    backgroundColor: 'rgba(246, 194, 62, 0.1)',
-                    fill: true,
-                    tension: 0.4
+                    label: 'Cantidad Comprada',
+                    data: @Html.Raw(Json.Serialize(ViewBag.CantidadesProductosComprados)),
+                    backgroundColor: colors.warning,
+                    borderRadius: 4
                 }]
             },
             options: {
@@ -293,10 +311,9 @@
                 scales: {
                     y: {
                         beginAtZero: true,
-                        ticks: {
-                            callback: function (value) {
-                                return '$ ' + value.toLocaleString();
-                            }
+                        title: {
+                            display: true,
+                            text: 'Unidades Compradas'
                         }
                     }
                 }

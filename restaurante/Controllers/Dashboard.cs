@@ -56,6 +56,18 @@ namespace restaurante.Controllers
                 })
                 .ToListAsync();
 
+            // Top 3 productos más comprados
+            var topProductosComprados = await _context.DetallesCompras
+                .Include(d => d.IdInventarioNavigation)
+                .GroupBy(d => d.IdInventarioNavigation.Nombre)
+                .Select(g => new {
+                    Nombre = g.Key,
+                    CantidadTotal = g.Sum(d => d.Cantidad)
+                })
+                .OrderByDescending(x => x.CantidadTotal)
+                .Take(3)
+                .ToListAsync();
+
             ViewBag.FechasPedidos = pedidosMes.Select(p => p.Fecha).ToList();
             ViewBag.TotalesPedidos = pedidosMes.Select(p => p.Total).ToList();
             ViewBag.OcupacionMesas = new int[] { mesasOcupadas, totalMesas - mesasOcupadas };
@@ -63,6 +75,8 @@ namespace restaurante.Controllers
             ViewBag.CantidadesPlatos = topPlatos.Select(p => p.Cantidad).ToList();
             ViewBag.FechasCompras = comprasMes.Select(c => c.Fecha).ToList();
             ViewBag.TotalesCompras = comprasMes.Select(c => c.Total).ToList();
+            ViewBag.NombresProductosComprados = topProductosComprados.Select(p => p.Nombre).ToList();
+            ViewBag.CantidadesProductosComprados = topProductosComprados.Select(p => p.CantidadTotal).ToList();
 
             return View();
         }
